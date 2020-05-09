@@ -206,7 +206,6 @@ ApplicationWindow {
         }
     }
 
-
     DropArea{
         id:droparea
         anchors.fill: parent
@@ -215,7 +214,7 @@ ApplicationWindow {
         onDropped: {
             if(drop.hasUrls)
             {
-                var subtitles = encodeHandler.extractSubtitles(drop.text);
+                var subtitles = encodeHandler.extractSubtitles(drop.urls);
 
                 if(subtitles.length > 1 || urlListModel.count > 1)
                 {

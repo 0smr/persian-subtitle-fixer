@@ -4,6 +4,13 @@ encodingHandler::encodingHandler()
 {
 }
 
+/*!
+ * \brief encodingHandler::localToUtf8
+ * \param fileAddress
+ * \param codecs
+ * \abstract change file encode from \a codec to utf-8 and replace some arabic letters with persian ones.
+ * \return a bytecode that contain fixed subtitle text or empty data if not.
+ */
 QByteArray encodingHandler::localToUtf8(QUrl fileAddress, QList<QByteArray> codecs)//"Windows-1256"
 {
     QFile file(fileAddress.url());
@@ -52,6 +59,12 @@ QByteArray encodingHandler::localToUtf8(QUrl fileAddress, QList<QByteArray> code
     return "";
 }
 
+
+/*!
+ * \brief encodingHandler::writeData
+ * \param indexList
+ * \return true if write data was successfull or false if not.
+ */
 bool encodingHandler::writeData(QList<qreal> indexList)
 {
     bool succeed = true;
@@ -68,55 +81,32 @@ bool encodingHandler::writeData(QList<qreal> indexList)
     return succeed;
 }
 
-QStringList encodingHandler::extractSubtitles(QString urls)
+/*!
+ * \brief encodingHandler::extractSubtitles
+ * \param urls
+ * \return a string list containing files urls.
+ */
+QStringList encodingHandler::extractSubtitles(QList<QUrl> urls)
 {
-    QStringList subtitles ,fileUrls = urls.split('\n',QString::SkipEmptyParts);
+    QStringList subtitles;
 
-    for(auto & url: fileUrls)
+    for(auto & url: urls)
     {
-        if(url.endsWith(".srt"))
+        if(url.path().endsWith(".srt") || url.path().endsWith(".ass"))//subtitle common types
         {
-            if(url.startsWith("file:///"))
-                url.remove(0,8);// if url start with "file:///" then remove it.
-            subtitles.push_back(url);
+            subtitles.push_back(url.url());
         }
     }
 
     return subtitles;
 }
 
-QString encodingHandler::getSample(QString content)
-{
-    int start = 0 , end = 0;
-
-    start = content.indexOf("5\r\n");
-    if(start == -1)
-    {
-        start = content.indexOf("5\n");
-    }
-
-    end = content.indexOf("\r\n",start+2);
-    end = content.indexOf("\r\n",end+2);
-
-    QStringRef y = content.midRef(start, end-start);
-
-    return y.toString().remove("\r\n");
-}
-
-QStringList encodingHandler::fixSubtitles_test(QStringList selectedSubtitles)
-{
-    QStringList samples;
-    for(const auto & sub : selectedSubtitles )
-    {
-        QByteArray content = localToUtf8(sub,QList<QByteArray>({"Windows-1256","ISO 8859-6"}));
-        samples.push_back(getSample(content));
-
-        mSubtitleUrls.push_back(sub);
-        mFixedContents.push_back(content);
-    }
-    return samples;
-}
-
+/*!
+ * \brief encodingHandler::fixSubtitles
+ * \abstract fix selected subtitles
+ * \param selectedSubtitles containing files url if selected or empty string if file doesn't selected
+ * \return a list containing weather if a case has succeed or not
+ */
 QList<bool> encodingHandler::fixSubtitles(QStringList selectedSubtitles)
 {
     QList<bool> states;
@@ -125,7 +115,7 @@ QList<bool> encodingHandler::fixSubtitles(QStringList selectedSubtitles)
         QByteArray content = localToUtf8(sub,QList<QByteArray>({"Windows-1256","ISO 8859-6"}));
         QFile file(sub);
 
-        if(sub.length() > 1 && file.open(QIODevice::ReadWrite) && content.length() > 1)
+        if(sub.length() > 0 && file.open(QIODevice::ReadWrite) && content.length() > 1)
         {
             file.resize(0);
             file.write(content);
@@ -140,12 +130,10 @@ QList<bool> encodingHandler::fixSubtitles(QStringList selectedSubtitles)
     return states;
 }
 
-bool encodingHandler::fixSingleSubtitle(QString subtitleUrl)
+bool encodingHandler::fixSingleSubtitle(QUrl subtitleUrl)
 {
-    QStringList samples;
-
     QByteArray content = localToUtf8(subtitleUrl,QList<QByteArray>({"Windows-1256"}));
-    QFile file(subtitleUrl);
+    QFile file(subtitleUrl.url());
 
     if(file.open(QIODevice::ReadWrite) && content.length() > 1)
     {
@@ -154,6 +142,5 @@ bool encodingHandler::fixSingleSubtitle(QString subtitleUrl)
         file.close();
         return true;
     }
-
     return false;
 }
