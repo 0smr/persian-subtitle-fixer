@@ -17,10 +17,10 @@ ApplicationWindow {
 
     title: qsTr("subtitle fixer");
 
+    // an instantient
     EncodeHandler{
         id:encodeHandler
     }
-
 
     Text {
         id: caption
@@ -30,6 +30,9 @@ ApplicationWindow {
         text: qsTr("Drag and Drop Here.");
     }
 
+    /*
+        list model containing droped files.
+    */
     ListModel {
         id: urlListModel
     }
@@ -64,8 +67,10 @@ ApplicationWindow {
 
                     for(var j = 0 ; j < urlListModel.count ; ++j)
                     {
-                        urlListModel.get(j).cMode = states[j] === true ? 1 : 2;
+                        urlListModel.get(j).cMode = states[j];
+                        urlListModel.get(j).enable = false;
                     }
+                    checkall.enabled = false;
 
                     state = 2
                     title.text = '⭯'
@@ -84,6 +89,7 @@ ApplicationWindow {
                     anim.restart();
                     opacityAnim.restart()
                     urlListModel.clear();
+                    checkall.enabled = true;
                 }
             }
 
@@ -125,6 +131,7 @@ ApplicationWindow {
             }
         }
 
+        // single CustomCheckDelegate for checkall CheckBox.
         CustomCheckDelegate {
             id:checkall
 
@@ -133,10 +140,16 @@ ApplicationWindow {
 
             Layout.fillWidth: true
             indecatorSize: 15
+            // z order 2 for being in top of urlListView
             z:2
 
-            property int allChildren
+            /*
+                all children count.
+                it will initialized in drag and drom function when multi files droped.
+            */
+            property int allChildren: 0
 
+            // on pressed check all CheckBox in urlListView
             onPressed: {
                 var check = !checked
                 for(var i = 0 ; i < urlListModel.count; ++i)
@@ -152,6 +165,7 @@ ApplicationWindow {
             }
         }
 
+        //a list view to show multi selected subtitles.
         ListView {
             id: urlListView
 
@@ -164,7 +178,10 @@ ApplicationWindow {
                 id:checkDelegate
 
                 text: subUrl
+                //set value to check delegate
                 checkState: val ? Qt.Checked : Qt.Unchecked
+
+                //chek or uncheck checkall CheckBox
                 onCheckStateChanged:{
                     val = checked
                     checkall.allChildren += checked == true ? 1 : -1
@@ -175,8 +192,11 @@ ApplicationWindow {
                 }
 
                 width: root.width
+                // indicades color animation to be shown.
                 colorMode: cMode
+                enabled: enable
 
+                //tooltip to show full file path.
                 ToolTip{
                     parent: checkDelegate.indicator
                     visible: hovered
@@ -194,7 +214,7 @@ ApplicationWindow {
                     }
                 }
             }
-
+            //a scroll bar to scroll through items
             ScrollBar.vertical: ScrollBar {}
             add: Transition {
                 NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
@@ -210,13 +230,15 @@ ApplicationWindow {
         onDropped: {
             if(drop.hasUrls)
             {
+                // extract .srt and .ass files and return thier urles
                 var subtitles = encodeHandler.extractSubtitles(drop.urls);
 
                 if(subtitles.length > 1 || urlListModel.count > 1)
                 {
+                    checkall.checked = true;
                     for(var i in subtitles)
                     {
-                        urlListModel.append({"subUrl":subtitles[i],"val":true,"cMode":0})
+                        urlListModel.append({"subUrl":subtitles[i],"val":true,"cMode":0,"enable":true})
                     }
 
                     checkall.allChildren = subtitles.length;
