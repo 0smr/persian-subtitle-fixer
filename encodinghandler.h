@@ -15,11 +15,9 @@ public:
     encodingHandler();
 
     QByteArray localToUtf8(QUrl fileAddress,QList<QByteArray> codecs);
-    Q_INVOKABLE bool writeData(QList<qreal> indexList);
     Q_INVOKABLE QStringList extractSubtitles(QList<QUrl> urls);
-    Q_INVOKABLE QList<bool> fixSubtitles(QList<QUrl> selectedSubtitles);
+    Q_INVOKABLE QList<int> fixSubtitles(QList<QUrl> selectedSubtitles);
     Q_INVOKABLE bool fixSingleSubtitle(QUrl subtitleUrl);
-
 signals:
 
 public slots:
