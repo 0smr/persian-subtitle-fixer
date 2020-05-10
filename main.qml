@@ -19,10 +19,6 @@ ApplicationWindow {
 
     EncodeHandler{
         id:encodeHandler
-
-        onInvalidUrlFound: {
-            console.log(url);
-        }
     }
 
 
