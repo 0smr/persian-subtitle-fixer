@@ -14,11 +14,13 @@ encodingHandler::encodingHandler()
 QByteArray encodingHandler::localToUtf8(QUrl fileAddress, QList<QByteArray> codecs)//"Windows-1256"
 {
     QFile file(fileAddress.toLocalFile());
-    if(file.open(QIODevice::ReadOnly))
+    if(file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
+        QString data{};
         QTextStream textStream(&file);
-        QString data = textStream.readAll();
         bool hasPersianText = false;
+
+        data = textStream.readAll();
 
         if(data.indexOf("سلام") != -1 ||  data.indexOf("من") != -1 ||  data.indexOf("می") != -1)
         {
@@ -58,28 +60,6 @@ QByteArray encodingHandler::localToUtf8(QUrl fileAddress, QList<QByteArray> code
     return "";
 }
 
-
-/*!
- * \brief encodingHandler::writeData
- * \param indexList
- * \return true if write data was successfull or false if not.
- */
-bool encodingHandler::writeData(QList<qreal> indexList)
-{
-    bool succeed = true;
-    for(const auto & i : indexList)
-    {
-        QFile file(mSubtitleUrls[static_cast<int>(i)]);
-
-        file.resize(0);
-        file.open(QIODevice::ReadWrite);
-
-        file.write(mFixedContents[static_cast<int>(i)]);
-    }
-
-    return succeed;
-}
-
 /*!
  * \brief encodingHandler::extractSubtitles
  * \param urls
@@ -106,9 +86,9 @@ QStringList encodingHandler::extractSubtitles(QList<QUrl> urls)
  * \param selectedSubtitles containing files url if selected or empty string if file doesn't selected
  * \return a list containing weather if a case has succeed or not
  */
-QList<bool> encodingHandler::fixSubtitles(QList<QUrl> selectedSubtitles)
+QList<int> encodingHandler::fixSubtitles(QList<QUrl> selectedSubtitles)
 {
-    QList<bool> states;
+    QList<int> states{};
     for(const auto & sub : selectedSubtitles )
     {
         if(!sub.isEmpty() && sub.isValid())
@@ -116,17 +96,22 @@ QList<bool> encodingHandler::fixSubtitles(QList<QUrl> selectedSubtitles)
             QByteArray content = localToUtf8(sub,QList<QByteArray>({"Windows-1256","ISO 8859-6"}));
             QFile file(sub.toLocalFile());
 
-            if(file.open(QIODevice::WriteOnly) && content.length() > 1)
+            if(file.open(QIODevice::WriteOnly | QIODevice::Text) && content.length() > 1)
             {
                 file.resize(0);
                 file.write(content);
+
                 file.close();
-                states.push_back(true);
+                states.push_back(1);
             }
             else
             {
-                states.push_back(false);
+                states.push_back(2);
             }
+        }
+        else
+        {
+            states.push_back(0);//represent no changes.
         }
     }
     return states;
@@ -135,7 +120,7 @@ QList<bool> encodingHandler::fixSubtitles(QList<QUrl> selectedSubtitles)
 bool encodingHandler::fixSingleSubtitle(QUrl subtitleUrl)
 {
     QByteArray content = localToUtf8(subtitleUrl,QList<QByteArray>({"Windows-1256"}));
-    QFile file(subtitleUrl.url());
+    QFile file(subtitleUrl.toLocalFile());
 
     if(file.open(QIODevice::ReadWrite) && content.length() > 1)
     {
