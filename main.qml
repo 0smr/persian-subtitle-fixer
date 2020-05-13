@@ -233,7 +233,7 @@ ApplicationWindow {
                 // extract .srt and .ass files and return thier urles
                 var subtitles = encodeHandler.extractSubtitles(drop.urls);
 
-                if(subtitles.length > 1 || urlListModel.count > 1)
+                if(subtitles.length > 1)
                 {
                     checkall.checked = true;
                     for(var i in subtitles)
@@ -250,7 +250,7 @@ ApplicationWindow {
                 }
                 else if(subtitles.length === 1)
                 {
-                    encodeHandler.fixSingleSubtitle(subtitles[0])
+                    encodeHandler.fixSubtitles([subtitles[0]])
                 }
             }
         }
