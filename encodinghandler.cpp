@@ -116,18 +116,3 @@ QList<int> encodingHandler::fixSubtitles(QList<QUrl> selectedSubtitles)
     }
     return states;
 }
-
-bool encodingHandler::fixSingleSubtitle(QUrl subtitleUrl)
-{
-    QByteArray content = localToUtf8(subtitleUrl,QList<QByteArray>({"Windows-1256"}));
-    QFile file(subtitleUrl.toLocalFile());
-
-    if(file.open(QIODevice::ReadWrite) && content.length() > 1)
-    {
-        file.resize(0);
-        file.write(content);
-        file.close();
-        return true;
-    }
-    return false;
-}
