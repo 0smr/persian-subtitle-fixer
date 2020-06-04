@@ -22,7 +22,10 @@ QByteArray encodingHandler::localToUtf8(QUrl fileAddress, QList<QByteArray> code
 
         data = textStream.readAll();
 
-        if(data.indexOf("سلام") != -1 ||  data.indexOf("من") != -1 ||  data.indexOf("می") != -1)
+        if(data.indexOf("سلام") != -1 ||
+                data.indexOf("من") != -1 ||
+                data.indexOf("می") != -1 ||
+                data.indexOf("مي") != -1)
         {
             hasPersianText = true;
         }
@@ -34,7 +37,10 @@ QByteArray encodingHandler::localToUtf8(QUrl fileAddress, QList<QByteArray> code
                 textStream.setCodec(QTextCodec::codecForName(codec));
                 data = textStream.readAll();
 
-                if(data.indexOf("سلام") != -1 ||  data.indexOf("من") != -1 ||  data.indexOf("می") != -1)
+                if(data.indexOf("سلام") != -1 ||
+                        data.indexOf("من") != -1 ||
+                        data.indexOf("می") != -1 ||
+                        data.indexOf("مي") != -1)
                 {
                     hasPersianText = true;
                     break;
@@ -42,13 +48,14 @@ QByteArray encodingHandler::localToUtf8(QUrl fileAddress, QList<QByteArray> code
             }
         }
 
+        //if file opened, it will close.
+        file.close();
+
         if(hasPersianText == true)
         {
             // standardize subtitle
             data.replace("ي","ی");//replace all arabic /Yudh/ with persian /Yudh/
             data.replace("ك","ک");//replace all arabic /Kaph/ with persian /Kaph/
-
-            file.close();
 
             return data.toUtf8();
         }
@@ -71,7 +78,8 @@ QStringList encodingHandler::extractSubtitles(QList<QUrl> urls)
 
     for(auto & url: urls)
     {
-        if(url.path().endsWith(".srt") || url.path().endsWith(".ass"))//subtitle common types
+        if(url.fileName().toLower().endsWith(".srt") ||
+                url.fileName().toLower().endsWith(".ass")) //subtitle common types
         {
             subtitles.push_back(url.url());
         }
@@ -106,6 +114,7 @@ QList<int> encodingHandler::fixSubtitles(QList<QUrl> selectedSubtitles)
             }
             else
             {
+                //if can't open file for writing or there is no content to write into file.
                 states.push_back(2);
             }
         }
