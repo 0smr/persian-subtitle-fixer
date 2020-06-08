@@ -10,3 +10,6 @@ a program that converts Window-1256 charset to UTF-8
 ## To do
 - [x] fix file selection.
 - [ ] add to right click menu.
+- [ ] animation for single file.
+- [ ] cancel button for multi files selection.
+- [ ] add settings section.
