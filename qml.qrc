@@ -3,6 +3,7 @@
         <file>main.qml</file>
         <file>CustomCheckDelegate.qml</file>
         <file>CustomButton.qml</file>
+        <file>SettingsView.qml</file>
     </qresource>
     <qresource prefix="/res">
         <file>resources/sub_fixer.ico</file>

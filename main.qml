@@ -196,7 +196,7 @@ ApplicationWindow {
                 colorMode: cMode
                 enabled: enable
 
-                //tooltip to show full file path.
+                // tooltip to show full file path.
                 ToolTip{
                     parent: checkDelegate.indicator
                     visible: hovered

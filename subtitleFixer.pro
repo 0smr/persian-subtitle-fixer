@@ -15,7 +15,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         encodinghandler.cpp \
-        main.cpp
+        main.cpp \
+        settingAPI.cpp
 
 RESOURCES += qml.qrc
 
@@ -31,6 +32,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    encodinghandler.h
+    encodinghandler.h \
+    settingAPI.h
 
 RC_FILE += icon-resource.rc

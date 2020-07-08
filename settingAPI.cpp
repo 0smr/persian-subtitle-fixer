@@ -1,6 +1,6 @@
-#include "registryhandler.h"
+#include "settingAPI.h"
 
-registryHandler::registryHandler()
+settingAPI::settingAPI()
 {
 
 }
