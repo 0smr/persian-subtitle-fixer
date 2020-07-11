@@ -1,4 +1,4 @@
-QT += qml quick core
+QT += qml quick
 
 CONFIG += c++14
 
@@ -16,7 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         encodinghandler.cpp \
         main.cpp \
-        settingAPI.cpp
+        #settingAPI.cpp
 
 RESOURCES += qml.qrc
 
@@ -33,6 +33,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     encodinghandler.h \
-    settingAPI.h
+    #settingAPI.h
 
 RC_FILE += icon-resource.rc

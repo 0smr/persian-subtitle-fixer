@@ -7,6 +7,7 @@ CheckDelegate {
     checked: true
 
     property real indecatorSize: 15
+    property var themeColor: "#ffc226"
     property real colorMode: 0
 
     clip: true;

@@ -4,6 +4,9 @@
         <file>CustomCheckDelegate.qml</file>
         <file>CustomButton.qml</file>
         <file>SettingsView.qml</file>
+        <file>CustomSlider.qml</file>
+        <file>CustomCheckBox.qml</file>
+        <file>DragAndDropView.qml</file>
     </qresource>
     <qresource prefix="/res">
         <file>resources/sub_fixer.ico</file>

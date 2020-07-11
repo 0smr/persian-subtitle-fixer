@@ -2,12 +2,16 @@
 #include <QQmlApplicationEngine>
 #include <QIcon>
 #include "encodinghandler.h"
+#include <QQmlDebuggingEnabler>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
+    QQmlDebuggingEnabler enabler;
     QGuiApplication app(argc, argv);
+
+    app.setOrganizationName("smr");
+    app.setOrganizationDomain("smr67.github.io");
 
     app.setWindowIcon(QIcon(":/res/resources/sub_fixer.ico"));
 

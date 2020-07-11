@@ -7,7 +7,7 @@ Slider {
 
     property var color: 'blue'
     property var colorTheme: control.enabled ? color : 'black'
-    property bool showValue: false
+    property bool showValue: true
 
     background: Rectangle {
 
@@ -42,11 +42,11 @@ Slider {
            }
         }
 
-        ToolTip{
-
+        ToolTip {
+            id: valuePreviewer
 
             parent: sliderHandle
-            visible: hovered
+            visible: control.showValue? hovered : false
             delay: 500
             timeout: 0
 

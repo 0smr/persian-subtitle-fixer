@@ -31,7 +31,7 @@ public:
         long errorCode = RegOpenKeyExA(HKEY_CURRENT_USER,nullptr,NULL,KEY_ALL_ACCESS,pointerKey);
 
         if(ERROR_SUCCESS == errorCode)
-            ;
+            return true;
 
         return false;
     }
