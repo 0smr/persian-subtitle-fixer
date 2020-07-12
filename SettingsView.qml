@@ -5,7 +5,6 @@ import Qt.labs.settings 1.1
 
 Rectangle {
     id: control
-    anchors.fill: parent
 
     property var themeColor: Qt.hsla(colorSlider.value,1,0.50)
 

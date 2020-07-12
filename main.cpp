@@ -2,12 +2,10 @@
 #include <QQmlApplicationEngine>
 #include <QIcon>
 #include "encodinghandler.h"
-#include <QQmlDebuggingEnabler>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QQmlDebuggingEnabler enabler;
     QGuiApplication app(argc, argv);
 
     app.setOrganizationName("smr");

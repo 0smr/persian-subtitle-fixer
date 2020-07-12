@@ -19,20 +19,50 @@ ApplicationWindow {
 
     title: qsTr("subtitle fixer");
 
-    SettingsView {
-        id:setting
+    ColumnLayout{
+
         anchors.fill: parent
-        visible: true
-    }
+        spacing: 0;
 
-    DragAndDropView {
-        id: dragAndDrop
-        anchors.fill: parent
+        Rectangle{
+            id: headerView
 
-        visible: false
+            Layout.fillWidth: true
+            height: 30
 
-        encodeHandler: EncodeHandler{
+            RowLayout{
+                spacing: 0;
+                Rectangle{
+                    id: backButton
 
+                    height: headerView.height
+                    width: 40
+                    color: 'gray'
+                }
+            }
+        }
+
+        Rectangle{
+            id: bodyView
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            SettingsView {
+                id:setting
+                anchors.fill: parent
+                visible: false
+            }
+
+            DragAndDropView {
+                id: dragAndDrop
+                anchors.fill: parent
+
+                visible: true
+
+                encodeHandler: EncodeHandler{
+                }
+            }
         }
     }
 }
