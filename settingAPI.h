@@ -27,12 +27,13 @@ public:
 
     bool createRegKey()
     {
+#ifdef WIN32
         PHKEY  pointerKey = nullptr;
         long errorCode = RegOpenKeyExA(HKEY_CURRENT_USER,nullptr,NULL,KEY_ALL_ACCESS,pointerKey);
 
         if(ERROR_SUCCESS == errorCode)
             return true;
-
+#endif
         return false;
     }
 
