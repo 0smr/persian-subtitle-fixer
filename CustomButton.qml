@@ -3,9 +3,10 @@ import QtQuick 2.12
 Rectangle{
     id: control
 
-    property alias title: title
+    property alias text: text
+    property bool clickEffect: false
     signal pressed()
-    signal hovered(bool hover);
+    signal hovered();
 
     color: "#ffc226"
 
@@ -13,8 +14,8 @@ Rectangle{
     z:2
 
     Text {
-        id: title
-        text: "Fix"
+        id: text
+        text: "Button"
         color: "white"
         opacity: .9
         font.pixelSize: 15
@@ -44,7 +45,7 @@ Rectangle{
         color: 'gray'
     }
 
-    MouseArea{
+    MouseArea {
         id: mouseArea
         anchors.fill: parent
 
@@ -55,7 +56,6 @@ Rectangle{
             control.pressed()
         }
 
-        onEntered: hovered(true)
-        onExited: hovered(false)
+        onEntered: control.hovered()
     }
 }

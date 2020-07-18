@@ -19,6 +19,18 @@ ApplicationWindow {
 
     title: qsTr("subtitle fixer");
 
+    SettingsView{
+        id:settingView
+    }
+
+    DragAndDropView{
+        id:dragDropView
+
+        encodeHandler:
+            EncodeHandler{}
+    }
+
+
     ColumnLayout{
 
         anchors.fill: parent
@@ -32,12 +44,21 @@ ApplicationWindow {
 
             RowLayout{
                 spacing: 0;
-                Rectangle{
+                Button {
                     id: backButton
 
-                    height: headerView.height
-                    width: 40
-                    color: 'gray'
+
+                    background:
+                        Rectangle {
+                        color: 'gray';
+                        height: headerView.height
+                        width: 40
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked:{}
+                    }
                 }
             }
         }
@@ -48,20 +69,11 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            SettingsView {
-                id:setting
+            StackView{
+                id:mainStackView
+
                 anchors.fill: parent
-                visible: false
-            }
-
-            DragAndDropView {
-                id: dragAndDrop
-                anchors.fill: parent
-
-                visible: true
-
-                encodeHandler: EncodeHandler{
-                }
+                initialItem: settingView
             }
         }
     }
