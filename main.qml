@@ -21,6 +21,7 @@ ApplicationWindow {
 
     SettingsView{
         id:settingView
+        visible: false;
     }
 
     DragAndDropView{
@@ -31,7 +32,11 @@ ApplicationWindow {
     }
 
 
+
+
     ColumnLayout{
+
+        visible: true;
 
         anchors.fill: parent
         spacing: 0;
@@ -41,24 +46,21 @@ ApplicationWindow {
 
             Layout.fillWidth: true
             height: 30
+            color: headerToggle.state ? '#f5f5f5' : 'Transparent'
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 2000
+                }}
 
             RowLayout{
+                y: 3
+                x: 1
                 spacing: 0;
-                Button {
-                    id: backButton
 
-
-                    background:
-                        Rectangle {
-                        color: 'gray';
-                        height: headerView.height
-                        width: 40
-                    }
-
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked:{}
-                    }
+                HambergerToggle{
+                    id: headerToggle
+                    width: headerView.height - 3
                 }
             }
         }
@@ -73,7 +75,7 @@ ApplicationWindow {
                 id:mainStackView
 
                 anchors.fill: parent
-                initialItem: settingView
+                initialItem: dragDropView
             }
         }
     }

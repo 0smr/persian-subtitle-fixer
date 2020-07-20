@@ -4,29 +4,30 @@ Rectangle {
     id: control
 
     color: 'transparent'
-    property var barColor: enabled ? 'black' : 'gray'
+    property var barColor: 'orange';
+    property var explicitBarColor: enabled ?
+                               hover ? Qt.lighter(barColor,1.2) : barColor : 'gray'
     property alias press: mouseArea.pressed
     property bool hover: false
-    property real state: press ? 1 : 2
+    property bool state: false
+
     signal hovered();
     signal pressed();
 
-    onPressed: press
-
     width: 50
-    height: 50
+    height: width
 
     Rectangle {
         id: top
-        y: control.state == 2 ? parent.height/3 : 0.03
+        y: control.state ? parent.height/3 : 0.03
 
         width: parent.width
         height: parent.height * 0.2
 
-        color: parent.barColor
+        color: parent.explicitBarColor
         radius: height/2
 
-        rotation: control.state == 2 ? 45 : 0
+        rotation: control.state ? -45 : 0
         Behavior on rotation{
             NumberAnimation{duration: 200}
         }
@@ -42,9 +43,9 @@ Rectangle {
         width: parent.width
         height: parent.height * 0.2
 
-        opacity: control.state == 2 ? 0 : 1
+        opacity: control.state ? 0 : 1
 
-        color: parent.barColor
+        color: parent.explicitBarColor
         radius: height/2
 
         Behavior on opacity{
@@ -54,15 +55,15 @@ Rectangle {
 
     Rectangle {
         id: bottom
-        y: control.state == 2 ? parent.height * 0.33 : parent.height * 0.66
+        y: control.state ? parent.height * 0.33 : parent.height * 0.66
 
         width: parent.width
         height: parent.height * 0.2
 
-        color: parent.barColor
+        color: parent.explicitBarColor
         radius: height/2
 
-        rotation: control.state == 2 ?-45 : 0
+        rotation: control.state ? 45 : 0
 
         Behavior on rotation{
             NumberAnimation{duration: 200}
@@ -81,6 +82,10 @@ Rectangle {
             control.hovered()
         }
         onExited: hover = false
-        onPressed: control.pressed()
+
+        onPressed: {
+            control.pressed()
+            control.state = !control.state;
+        }
     }
 }

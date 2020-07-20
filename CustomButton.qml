@@ -3,7 +3,7 @@ import QtQuick 2.12
 Rectangle{
     id: control
 
-    property alias text: text
+    property alias title: title
     property bool clickEffect: false
     signal pressed()
     signal hovered();
@@ -14,7 +14,7 @@ Rectangle{
     z:2
 
     Text {
-        id: text
+        id: title
         text: "Button"
         color: "white"
         opacity: .9
