@@ -74,7 +74,7 @@ ApplicationWindow {
             StackView{
                 id:mainStackView
 
-                anchors.fill: parent
+                anchors.fill: parents
                 initialItem: dragDropView
             }
         }
