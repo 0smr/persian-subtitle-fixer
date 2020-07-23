@@ -3,13 +3,15 @@ import QtQuick 2.0
 Rectangle {
     id: control
 
-    color: 'transparent'
+    property real barHeight: control.height * 0.15
     property var barColor: 'orange';
     property var explicitBarColor: enabled ?
                                hover ? Qt.lighter(barColor,1.2) : barColor : 'gray'
+
+
+
     property alias press: mouseArea.pressed
     property bool hover: false
-    property bool state: false
 
     signal hovered();
     signal pressed();
@@ -17,75 +19,111 @@ Rectangle {
     width: 50
     height: width
 
+    color: 'transparent'
+    state: 'menu'
+
+    states: [
+        State {
+            name: 'menu'
+            PropertyChanges {
+                target: top
+                y: 0
+                rotation: 0
+            }
+            PropertyChanges {
+                target: bottom
+                y: control.height * 0.66
+                rotation: 0
+            }
+        },
+        State {
+            name: 'close'
+            PropertyChanges {
+                target: top
+                y: control.height * 0.33
+                rotation: -45
+            }
+            PropertyChanges {
+                target: middle
+                x: control.height * 0.3
+                width: 0
+            }
+            PropertyChanges {
+                target: bottom
+                y: control.height * 0.33
+                rotation: 45
+            }
+        },
+        State {
+            name: 'back'
+            PropertyChanges {
+                target: top
+                y: control.height * 0.15
+                width: control.width * 0.7
+                rotation: -35
+            }
+            PropertyChanges {
+                target: middle
+                x: control.height * 0.13
+            }
+            PropertyChanges {
+                target: bottom
+                y: control.height * 0.52
+                width: control.width * 0.7
+                rotation: 35
+            }
+        }
+    ]
+
+    transitions: Transition {
+            NumberAnimation {
+                properties: 'x,y,rotation,width';
+            }
+        }
+
     Rectangle {
         id: top
-        y: control.state ? parent.height/3 : 0.03
+        y: 0.03
 
-        width: parent.width
-        height: parent.height * 0.2
+        width: control.width
+        height: control.barHeight
 
         color: parent.explicitBarColor
         radius: height/2
-
-        rotation: control.state ? -45 : 0
-        Behavior on rotation{
-            NumberAnimation{duration: 200}
-        }
-        Behavior on y{
-            NumberAnimation{duration: 200}
-        }
     }
 
     Rectangle {
-        id: midlle
-        y: parent.height * 0.33
+        id: middle
+        y: control.height * 0.33
 
-        width: parent.width
-        height: parent.height * 0.2
-
-        opacity: control.state ? 0 : 1
+        width: control.width
+        height: control.barHeight
+        opacity: 1
 
         color: parent.explicitBarColor
         radius: height/2
-
-        Behavior on opacity{
-            NumberAnimation{duration: 200}
-        }
     }
 
     Rectangle {
         id: bottom
-        y: control.state ? parent.height * 0.33 : parent.height * 0.66
+        y: control.height * 0.66
 
-        width: parent.width
-        height: parent.height * 0.2
+        width: control.width
+        height: control.barHeight
 
-        color: parent.explicitBarColor
+        color: control.explicitBarColor
         radius: height/2
-
-        rotation: control.state ? 45 : 0
-
-        Behavior on rotation{
-            NumberAnimation{duration: 200}
-        }
-        Behavior on y{
-            NumberAnimation{duration: 200}
-        }
     }
 
     MouseArea {
         id: mouseArea
-        anchors.fill: parent
+        anchors.fill: control
         hoverEnabled: true
         onEntered: {
             hover = true;
             control.hovered()
         }
         onExited: hover = false
-
-        onPressed: {
-            control.pressed()
-            control.state = !control.state;
-        }
+        onPressed: control.pressed()
     }
 }
