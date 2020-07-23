@@ -4,22 +4,22 @@ Rectangle{
     id: control
 
     property alias title: title
-    property bool clickEffect: false
+    property bool clickEffect: true
     signal pressed()
     signal hovered();
 
-    color: "#ffc226"
+    color: 'orange'
 
     clip: true;
-    z:2
 
     Text {
         id: title
-        text: "Button"
-        color: "white"
+        text: '.'
+        color: 'white'
         opacity: .9
         font.pixelSize: 15
         anchors.centerIn: parent
+        anchors.verticalCenterOffset: -font.pixelSize/ 20
     }
 
     Rectangle{
@@ -30,12 +30,13 @@ Rectangle{
 
         radius: width/2
 
+        visible: control.clickEffect
 
         opacity: 0.1 * mouseArea.pressed
         scale: 2 * mouseArea.pressed
 
         Behavior on scale{
-            NumberAnimation{duration: width}
+            NumberAnimation{duration: 4 * width}
         }
 
         Behavior on opacity{
