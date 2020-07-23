@@ -15,7 +15,7 @@
 #include <stdlib.h>
 
 #ifdef WIN32
-    #include <Windows.h>
+    #include <windows.h>
     #include <winreg.h>
 #endif
 

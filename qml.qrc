@@ -8,8 +8,20 @@
         <file>CustomCheckBox.qml</file>
         <file>DragAndDropView.qml</file>
         <file>HambergerToggle.qml</file>
+        <file>ImageButton.qml</file>
+        <file>About.qml</file>
     </qresource>
     <qresource prefix="/res">
         <file>resources/sub_fixer.ico</file>
+        <file>resources/buttonIcons/settings.svg</file>
+        <file>resources/buttonIcons/settings.png</file>
+        <file>resources/buttonIcons/info.png</file>
+        <file>resources/buttonIcons/info.svg</file>
+        <file>resources/buttonIcons/info_2.png</file>
+        <file>resources/buttonIcons/info_2.svg</file>
+        <file>resources/buttonIcons/settings_2.png</file>
+        <file>resources/buttonIcons/settings_2.svg</file>
+        <file>resources/buttonIcons/settings_3.png</file>
+        <file>resources/buttonIcons/settings_3.svg</file>
     </qresource>
 </RCC>

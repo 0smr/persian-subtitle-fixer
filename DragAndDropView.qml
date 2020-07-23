@@ -28,6 +28,8 @@ Rectangle {
             Layout.fillWidth: true
             height: 40
 
+            z: 2
+
             onPressed: {
                 if(state === 1)
                 {
