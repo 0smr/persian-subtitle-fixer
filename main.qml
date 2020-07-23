@@ -27,12 +27,13 @@ ApplicationWindow {
     DragAndDropView{
         id:dragDropView
 
+        visible: false;
         encodeHandler:
             EncodeHandler{}
     }
-
-
-
+    About{
+        id: aboutView
+    }
 
     ColumnLayout{
 
@@ -45,27 +46,109 @@ ApplicationWindow {
             id: headerView
 
             Layout.fillWidth: true
-            height: 30
-            color: headerToggle.state ? '#f5f5f5' : 'Transparent'
+            height: 25
 
-            Behavior on color {
-                ColorAnimation {
-                    duration: 2000
-                }}
+            states:
+                State {
+                    when: headerToggle.state !== 'menu'
+                    PropertyChanges {
+                        target: headerView
+                        color:'#f5f5f5'
+                    }
+                }
 
-            RowLayout{
+            transitions: Transition {
+                ColorAnimation {duration: 300 }
+            }
+
+            RowLayout {
+                width: parent.width
                 y: 3
-                x: 1
-                spacing: 0;
+                spacing: 3
 
                 HambergerToggle{
                     id: headerToggle
                     width: headerView.height - 3
+                    Layout.leftMargin: 3
+
+                    onPressed: {
+                        if(headerToggle.state === 'back')
+                        {
+                            mainStackView.pop();
+                            headerToggle.state = 'close'
+                            settingButton.opacity = 1
+                            infoButton.opacity = 1
+                        }
+                        else if (headerToggle.state === 'close')
+                        {
+                            headerToggle.state = 'menu'
+                            settingButton.opacity = 0
+                            infoButton.opacity = 0
+                        }
+                        else
+                        {
+                            headerToggle.state = 'close'
+                            settingButton.opacity = 1
+                            infoButton.opacity = 1
+                        }
+                    }
+                }
+
+                Rectangle{
+                    id: spacer
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    color: 'Transparent'
+                }
+
+                ImageButton {
+                    id: infoButton
+                    source: 'qrc:/res/resources/buttonIcons/settings_3.png'
+
+                    width: headerView.height - 6
+                    height: width
+
+                    Layout.rightMargin: 3
+                    Layout.alignment: Qt.AlignTop
+
+                    opacity: 0
+
+                    onPressed: {
+                        if(mainStackView.depth <= 1)
+                        {
+                            mainStackView.push(settingView)
+                            headerToggle.state = 'back'
+                            settingButton.opacity = 0
+                            infoButton.opacity = 0
+                        }
+                    }
+                }
+
+                ImageButton {
+                    id: settingButton
+                    source: 'qrc:/res/resources/buttonIcons/info.png'
+
+                    width: headerView.height - 6
+                    height: width
+                    Layout.rightMargin: 3
+                    Layout.alignment: Qt.AlignTop
+
+                    opacity: 0
+
+                    onPressed: {
+                        if(mainStackView.depth <= 1)
+                        {
+                            mainStackView.push(aboutView)
+                            headerToggle.state = 'back'
+                            settingButton.opacity = 0
+                            infoButton.opacity = 0
+                        }
+                    }
                 }
             }
         }
 
-        Rectangle{
+        Rectangle {
             id: bodyView
 
             Layout.fillWidth: true
@@ -74,7 +157,7 @@ ApplicationWindow {
             StackView{
                 id:mainStackView
 
-                anchors.fill: parents
+                anchors.fill: parent
                 initialItem: dragDropView
             }
         }
