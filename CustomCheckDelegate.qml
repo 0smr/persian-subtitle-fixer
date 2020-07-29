@@ -7,7 +7,7 @@ CheckDelegate {
     checked: true
 
     property real indecatorSize: 15
-    property var themeColor: "#ffc226"
+    property var mainColor: 'orange'
     property real colorMode: 0
 
     clip: true;
@@ -32,8 +32,8 @@ CheckDelegate {
         x: control.rightPadding
         y: control.topPadding + control.availableHeight / 2 - height / 2
         radius: 3
-        color: "transparent"
-        border.color: colorMode == 0 ? (control.down ? "#ffc226" : "#ffb700") : "white"
+        color: 'transparent'
+        border.color: colorMode == 0 ? (control.down ? Qt.lighter(mainColor,1.2) : mainColor) : 'white'
 
         Rectangle {
             width: parent.width*.80
@@ -41,7 +41,7 @@ CheckDelegate {
             x: width/8
             y: x
             radius: 2
-            color: colorMode == 0 ? (control.down ? "#ffc226" : "#ffcc00") : "white"
+            color: colorMode == 0 ? (control.down ? Qt.lighter(mainColor,1.1) : mainColor) : 'white'
 
             scale: control.checked * 1
 

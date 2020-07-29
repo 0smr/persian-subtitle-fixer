@@ -7,6 +7,7 @@ Rectangle {
     id:control
 
     property var encodeHandler: null
+    property var mainColor: 'orange'
 
     /*
         list model containing droped files.
@@ -28,6 +29,11 @@ Rectangle {
             Layout.fillWidth: true
             height: 40
 
+            color: Qt.lighter(control.mainColor,1.5);
+
+            title.text: 'Fix'
+            title.font.pixelSize: 15
+            title.font.family: 'Font Awesome 5 Pro Solid'
             z: 2
 
             onPressed: {
@@ -53,8 +59,7 @@ Rectangle {
                     checkall.enabled = false;
 
                     state = 2
-                    title.text = '⭯'
-                    title.font.pixelSize = 20
+                    title.text = '\uf0e2'
 
                     anim.from= 0
                     anim.to= 720
@@ -73,11 +78,11 @@ Rectangle {
                 }
             }
 
-            NumberAnimation
-            {
+            NumberAnimation {
                 id: opacityAnim
+
                 targets: [btn,checkall]
-                property: "opacity"
+                property: 'opacity'
                 duration: anim.duration
                 from:1
                 to:0
@@ -90,22 +95,20 @@ Rectangle {
             NumberAnimation{
                 id: anim
                 target: btn.title
-                property: "rotation"
+                property: 'rotation'
                 easing.type: Easing.OutQuint
                 duration: 4500
 
                 onFinished: {
                     if(btn.state === 1)
                     {
-                        control.height = control.minimumHeight
                         colLayout.visible = false;
                         droparea.visible = true
                         droparea.focus = true
-                        caption.visible = true;
+                        caption.opacity = 1;
 
                         btn.state = 1
-                        btn.title.text = "Fix"
-                        btn.title.font.pixelSize = 15;
+                        btn.title.text = 'Fix'
                     }
                 }
             }
@@ -120,6 +123,8 @@ Rectangle {
 
             Layout.fillWidth: true
             indecatorSize: 15
+
+            mainColor: Qt.lighter(control.mainColor,1.3)
             // z order 2 for being in top of urlListView
             z:2
 
@@ -171,6 +176,7 @@ Rectangle {
                         checkall.checked = false
                 }
 
+                mainColor: Qt.lighter(control.mainColor,1.3)
                 width: control.width
                 // indicades color animation to be shown.
                 colorMode: cMode
@@ -188,7 +194,7 @@ Rectangle {
                     }
                     opacity: .8
                     background: Rectangle{
-                        color: "#ffbb00"
+                        color: Qt.lighter(control.mainColor,1.5)
                         opacity: .5
                         radius: 5
                     }
@@ -197,7 +203,7 @@ Rectangle {
             //a scroll bar to scroll through items
             ScrollBar.vertical: ScrollBar {}
             add: Transition {
-                NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
+                NumberAnimation { property: 'opacity'; from: 0; to: 1.0; duration: 400 }
             }
         }
     }
@@ -205,7 +211,7 @@ Rectangle {
     Text {
         id: caption
 
-        anchors.centerIn: parent
+        anchors.centerIn: control
         color: 'gray'
         text: qsTr("Drag and Drop Here.");
     }
@@ -231,10 +237,9 @@ Rectangle {
 
                     checkall.allChildren = subtitles.length;
 
-                    caption.visible = false;
+                    caption.opacity = 0;
                     colLayout.visible = true
-                    control.height = 300
-                    visible = false
+                    control.height = 250
                 }
                 else if(subtitles.length === 1)
                 {

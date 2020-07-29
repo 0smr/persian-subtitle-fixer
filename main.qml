@@ -10,10 +10,10 @@ ApplicationWindow {
     visible: true
 
     width: 250
-    height: 125
+    height: dragDropView.height + headerView.height
 
     minimumWidth: 225
-    minimumHeight: 100
+    minimumHeight: 150
 
     maximumWidth: 300
 
@@ -30,9 +30,12 @@ ApplicationWindow {
         visible: false;
         encodeHandler:
             EncodeHandler{}
+        mainColor: settingView.mainColor
     }
+
     About{
         id: aboutView
+        visible: false;
     }
 
     ColumnLayout{
@@ -48,13 +51,14 @@ ApplicationWindow {
             height: 25
 
             z: 99
+            color: 'White'
 
             states:
                 State {
                     when: headerToggle.state !== 'menu'
                     PropertyChanges {
                         target: headerView
-                        color:'#f5f5f5'
+                        color: Qt.lighter(settingView.mainColor,1.9)
                     }
                 }
 
