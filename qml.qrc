@@ -23,5 +23,8 @@
         <file>resources/buttonIcons/settings_2.svg</file>
         <file>resources/buttonIcons/settings_3.png</file>
         <file>resources/buttonIcons/settings_3.svg</file>
+        <file>resources/SVG/icon_dark_shadow.svg</file>
+        <file>resources/SVG/icon_light_shadow.svg</file>
+        <file>resources/SVG/icon_light_shadow.png</file>
     </qresource>
 </RCC>

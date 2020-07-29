@@ -4,7 +4,7 @@ import QtGraphicalEffects 1.12
 Rectangle {
     id: control
 
-    property var themeColor: 'orange'
+    property var mainColor: 'orange'
     property alias source: icon.source
 
     property bool press: false
@@ -26,9 +26,9 @@ Rectangle {
     {
         anchors.fill: icon
         source: icon
-        color: control.press ? Qt.darker(control.themeColor,1.1) :
-                               control.hover ? Qt.lighter(control.themeColor,1.3)
-                                            : control.themeColor;
+        color: control.press ? Qt.darker(control.mainColor,1.1) :
+                               control.hover ? Qt.lighter(control.mainColor,1.3)
+                                            : control.mainColor;
     }
 
     MouseArea {

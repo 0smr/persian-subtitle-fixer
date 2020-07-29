@@ -9,13 +9,13 @@ ApplicationWindow {
     id: root
     visible: true
 
-//    width: 225
-//    height: 75
-    width: 400
-    height: 250
+    width: 250
+    height: 125
 
     minimumWidth: 225
-    minimumHeight: 75
+    minimumHeight: 100
+
+    maximumWidth: 300
 
     title: qsTr("subtitle fixer");
 
@@ -36,7 +36,6 @@ ApplicationWindow {
     }
 
     ColumnLayout{
-
         visible: true;
 
         anchors.fill: parent
@@ -47,6 +46,8 @@ ApplicationWindow {
 
             Layout.fillWidth: true
             height: 25
+
+            z: 99
 
             states:
                 State {
@@ -70,6 +71,7 @@ ApplicationWindow {
                     id: headerToggle
                     width: headerView.height - 3
                     Layout.leftMargin: 3
+                    barColor: Qt.lighter(settingView.mainColor,1.3)
 
                     onPressed: {
                         if(headerToggle.state === 'back')
@@ -108,6 +110,8 @@ ApplicationWindow {
                     width: headerView.height - 6
                     height: width
 
+                    mainColor:settingView.mainColor
+
                     Layout.rightMargin: 3
                     Layout.alignment: Qt.AlignTop
 
@@ -130,6 +134,8 @@ ApplicationWindow {
 
                     width: headerView.height - 6
                     height: width
+                    mainColor:settingView.mainColor
+
                     Layout.rightMargin: 3
                     Layout.alignment: Qt.AlignTop
 
