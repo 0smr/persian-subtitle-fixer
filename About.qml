@@ -80,9 +80,10 @@ Item {
                 //id:
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                text: qsTr("description: (see page below)<br>"+
-                           "github page: <a href='https://github.com/SMR76/persian-subtitle-fixer'>"+
-                           "SMR76/persian-subtitle-fixer</a><br>"+
+                text: qsTr("description: (see page below)<br>" +
+                           "github page: <a href='https://github.com/SMR76/persian-subtitle-fixer'>" +
+                           "SMR76/persian-subtitle-fixer</a><br>" +
+                           "version: 0.5 (2020.7.29)<br>" +
                            "Copyright © 2020 smr76.github.io")
                 Layout.leftMargin: 10
             }
