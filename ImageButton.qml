@@ -10,6 +10,9 @@ Rectangle {
     property bool press: false
     property bool hover: false
 
+    property var appear: appear;
+    property var disappear: disappear;
+
     signal pressed()
     signal hovered();
 
@@ -33,7 +36,7 @@ Rectangle {
 
     MouseArea {
         id: mouseArea
-        anchors.fill: parent
+        anchors.fill: control
         hoverEnabled: true
 
         onPressed: {
@@ -49,9 +52,27 @@ Rectangle {
         onExited: control.hover = false;
     }
 
-    Behavior on opacity {
-        NumberAnimation{
-            duration: 300
+    NumberAnimation {
+        id: appear
+        target: control
+        properties: 'opacity'
+        running: false
+        to: 1
+        duration: 300
+        onStarted: {
+            control.visible = true;
         }
     }
+
+    NumberAnimation {
+        id: disappear
+        target: control
+        properties: 'opacity'
+        to: 0
+        duration: 300
+        onFinished: {
+            control.visible = false;
+        }
+    }
+
 }
