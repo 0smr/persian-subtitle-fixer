@@ -13,11 +13,11 @@ ApplicationWindow {
     height: dragDropView.height + headerView.height
 
     minimumWidth: 225
-    minimumHeight: 150
+    minimumHeight: 135
 
     maximumWidth: 300
 
-    title: qsTr("subtitle fixer");
+    title: qsTr('subtitle fixer');
 
     SettingsView{
         id:settingView
@@ -31,6 +31,14 @@ ApplicationWindow {
         encodeHandler:
             EncodeHandler{}
         mainColor: settingView.mainColor
+        onFilesDroped: {
+            headerToggle.state = 'close';
+            settingButton.opacity = 0;
+            infoButton.opacity = 0;
+        }
+        onFinished: {
+            headerToggle.state = 'menu';
+        }
     }
 
     About{
@@ -81,21 +89,24 @@ ApplicationWindow {
                         if(headerToggle.state === 'back')
                         {
                             mainStackView.pop();
-                            headerToggle.state = 'close'
-                            settingButton.opacity = 1
-                            infoButton.opacity = 1
+                            headerToggle.state = 'close';
+                            settingButton.appear.start();
+                            infoButton.appear.start();
                         }
                         else if (headerToggle.state === 'close')
                         {
-                            headerToggle.state = 'menu'
-                            settingButton.opacity = 0
-                            infoButton.opacity = 0
+                            // for drag and drop view
+                            dragDropView.cancelPressed();
+
+                            headerToggle.state = 'menu';
+                            settingButton.disappear.start();
+                            infoButton.disappear.start();
                         }
                         else
                         {
-                            headerToggle.state = 'close'
-                            settingButton.opacity = 1
-                            infoButton.opacity = 1
+                            headerToggle.state = 'close';
+                            settingButton.appear.start();
+                            infoButton.appear.start();
                         }
                     }
                 }
@@ -120,14 +131,15 @@ ApplicationWindow {
                     Layout.alignment: Qt.AlignTop
 
                     opacity: 0
+                    visible: false
 
                     onPressed: {
                         if(mainStackView.depth <= 1)
                         {
                             mainStackView.push(settingView)
-                            headerToggle.state = 'back'
-                            settingButton.opacity = 0
-                            infoButton.opacity = 0
+                            headerToggle.state = 'back';
+                            settingButton.disappear.start();
+                            infoButton.disappear.start();
                         }
                     }
                 }
@@ -144,14 +156,15 @@ ApplicationWindow {
                     Layout.alignment: Qt.AlignTop
 
                     opacity: 0
+                    visible: false
 
                     onPressed: {
                         if(mainStackView.depth <= 1)
                         {
-                            mainStackView.push(aboutView)
-                            headerToggle.state = 'back'
-                            settingButton.opacity = 0
-                            infoButton.opacity = 0
+                            mainStackView.push(aboutView);
+                            headerToggle.state = 'back';
+                            settingButton.disappear.start();
+                            infoButton.disappear.start();
                         }
                     }
                 }

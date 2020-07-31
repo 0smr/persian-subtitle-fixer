@@ -8,6 +8,17 @@ Rectangle {
 
     property var encodeHandler: null
     property var mainColor: 'orange'
+    property var filesInDrop : !droparea.enabled
+
+    signal filesDroped();
+    signal cancelPressed();
+    signal finished();
+
+    onCancelPressed: {
+        btn.state = 2;
+        btn.title.text = '';
+        btn.pressed();
+    }
 
     /*
         list model containing droped files.
@@ -61,6 +72,7 @@ Rectangle {
                     state = 2
                     title.text = '\uf0e2'
 
+                    anim.duration = 4500
                     anim.from= 0
                     anim.to= 720
                     anim.restart();
@@ -75,6 +87,7 @@ Rectangle {
                     opacityAnim.restart()
                     urlListModel.clear();
                     checkall.enabled = true;
+                    control.finished();
                 }
             }
 
@@ -103,9 +116,8 @@ Rectangle {
                     if(btn.state === 1)
                     {
                         colLayout.visible = false;
-                        droparea.visible = true
-                        droparea.focus = true
-                        caption.opacity = 1;
+                        droparea.enabled = true
+                        caption.visible = true;
 
                         btn.state = 1
                         btn.title.text = 'Fix'
@@ -216,6 +228,35 @@ Rectangle {
         text: qsTr("Drag and Drop Here.");
     }
 
+    Rectangle{
+        id: screenAnimator
+        height: control.height
+        color: control.mainColor
+
+        ParallelAnimation {
+            id: screenAnimatorAnim
+            running: false
+            NumberAnimation {
+                target: screenAnimator
+                properties: 'width'
+                duration: 300
+                from: 0
+                to: control.width
+            }
+
+            NumberAnimation {
+                target: screenAnimator
+                properties: 'opacity'
+                duration: 500
+                from: 0.2
+                to: 0
+            }
+            onFinished: {
+                screenAnimator.width = 0;
+            }
+        }
+    }
+
     DropArea{
         id:droparea
         anchors.fill: parent
@@ -237,13 +278,16 @@ Rectangle {
 
                     checkall.allChildren = subtitles.length;
 
-                    caption.opacity = 0;
-                    colLayout.visible = true
-                    control.height = 250
+                    caption.visible = false;
+                    colLayout.visible = true;
+                    droparea.enabled = false;
+                    control.height = 250;
+                    control.filesDroped();
                 }
                 else if(subtitles.length === 1)
                 {
                     encodeHandler.fixSubtitles([subtitles[0]])
+                    screenAnimatorAnim.restart();
                 }
             }
         }
