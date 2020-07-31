@@ -9,7 +9,7 @@ Item {
         anchors.fill: parent
         ColumnLayout {
 
-            width: parent.width < 400 ? parent.width : 400
+            width: parent.width
             spacing: 10
 
             Rectangle{
@@ -80,12 +80,13 @@ Item {
                 //id:
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                Layout.leftMargin: 10
                 text: qsTr("description: (see page below)<br>" +
                            "github page: <a href='https://github.com/SMR76/persian-subtitle-fixer'>" +
                            "SMR76/persian-subtitle-fixer</a><br>" +
                            "version: 0.5 (2020.7.29)<br>" +
                            "Copyright © 2020 smr76.github.io")
-                Layout.leftMargin: 10
+                onLinkActivated: Qt.openUrlExternally(link)
             }
         }
     }
