@@ -15,7 +15,7 @@
 #include <stdlib.h>
 
 #ifdef WIN32
-    #include <windows.h>
+    #include <Windows.h>
     #include <winreg.h>
 #endif
 
@@ -40,6 +40,7 @@ public:
 signals:
 
 public slots:
+
 };
 
 #endif // REGISTRYHANDLER_H
