@@ -3,11 +3,13 @@ import QtQuick.Window 2.13
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.11
 
-Rectangle {
+import "../controls"
+
+Item {
     id:control
 
-    property var encodeHandler: null
-    property var mainColor: 'orange'
+    property var subtitleHandler: null
+    property var color: 'orange'
     property var filesInDrop : !droparea.enabled
 
     signal filesDroped();
@@ -25,22 +27,39 @@ Rectangle {
     */
     ListModel {
         id: urlListModel
+
+        onCountChanged: {
+            if(urlListModel.count >= 0) {
+                checkall.checked = true;
+                caption.visible = false;
+                colLayout.visible = true;
+                droparea.enabled = false;
+                control.height = 250;
+
+            } else {
+                colLayout.visible = false;
+                droparea.enabled = true
+                caption.visible = true;
+                control.height = 150;
+            }
+            checkall.allChildren = urlListModel.count;
+        }
     }
 
-    ColumnLayout{
+    ColumnLayout {
         id: colLayout
 
         anchors.fill: parent
         visible:false
 
-        CustomButton{
+        CustomButton {
             id:btn
 
             property real state: 1
             Layout.fillWidth: true
             height: 40
 
-            color: Qt.lighter(control.mainColor,1.5);
+            color: Qt.lighter(control.color,1.5);
 
             title.text: 'Fix'
             title.font.pixelSize: 15
@@ -60,7 +79,7 @@ Rectangle {
                             selectedUrls.push("");
                     }
 
-                    var states = encodeHandler.fixSubtitles(selectedUrls);
+                    var states = subtitleHandler.fixSubtitles(selectedUrls);
 
                     for(var j = 0 ; j < urlListModel.count ; ++j)
                     {
@@ -100,6 +119,11 @@ Rectangle {
                 from:1
                 to:0
                 onFinished:{
+                    colLayout.visible = false;
+                    droparea.enabled = true
+                    caption.visible = true;
+                    control.height = 150;
+
                     btn.opacity = 1
                     checkall.opacity = 1
                 }
@@ -115,10 +139,6 @@ Rectangle {
                 onFinished: {
                     if(btn.state === 1)
                     {
-                        colLayout.visible = false;
-                        droparea.enabled = true
-                        caption.visible = true;
-
                         btn.state = 1
                         btn.title.text = 'Fix'
                     }
@@ -136,7 +156,7 @@ Rectangle {
             Layout.fillWidth: true
             indecatorSize: 15
 
-            mainColor: Qt.lighter(control.mainColor,1.3)
+            mainColor: Qt.lighter(control.color,1.3)
             // z order 2 for being in top of urlListView
             z:2
 
@@ -156,7 +176,7 @@ Rectangle {
                 checked = !checked
             }
 
-            background: Rectangle{
+            background: Rectangle {
                 width: checkall.width
                 height: checkall.height
             }
@@ -188,7 +208,7 @@ Rectangle {
                         checkall.checked = false
                 }
 
-                mainColor: Qt.lighter(control.mainColor,1.3)
+                mainColor: Qt.lighter(control.color,1.3)
                 width: control.width
                 // indicades color animation to be shown.
                 colorMode: cMode
@@ -206,7 +226,7 @@ Rectangle {
                     }
                     opacity: .8
                     background: Rectangle{
-                        color: Qt.lighter(control.mainColor,1.5)
+                        color: Qt.lighter(control.color,1.5)
                         opacity: .5
                         radius: 5
                     }
@@ -228,10 +248,10 @@ Rectangle {
         text: qsTr("Drag and Drop Here.");
     }
 
-    Rectangle{
+    Rectangle {
         id: screenAnimator
         height: control.height
-        color: control.mainColor
+        color: control.color
 
         ParallelAnimation {
             id: screenAnimatorAnim
@@ -257,36 +277,37 @@ Rectangle {
         }
     }
 
-    DropArea{
+    function addExternalFileToView(urlList) {
+        console.log(urlList)
+        var subtitles = subtitleHandler.extractSubtitles(urlList);
+
+        for(var i in subtitles) {
+            console.log(subtitles[i]);
+            urlListModel.append({"subUrl":subtitles[0],"val":true,"cMode":0,"enable":true});
+        }
+    }
+
+
+    DropArea {
         id:droparea
         anchors.fill: parent
         focus: true
 
         onDropped: {
-            if(drop.hasUrls)
-            {
+            if(drop.hasUrls) {
                 // extract .srt and .ass files and return thier urles
-                var subtitles = encodeHandler.extractSubtitles(drop.urls);
+                var subtitles = subtitleHandler.extractSubtitles(drop.urls);
 
-                if(subtitles.length > 1)
-                {
+                if(subtitles.length > 1) {
                     checkall.checked = true;
-                    for(var i in subtitles)
-                    {
+                    for(var i in subtitles) {
                         urlListModel.append({"subUrl":subtitles[i],"val":true,"cMode":0,"enable":true})
                     }
 
-                    checkall.allChildren = subtitles.length;
-
-                    caption.visible = false;
-                    colLayout.visible = true;
-                    droparea.enabled = false;
-                    control.height = 250;
                     control.filesDroped();
                 }
-                else if(subtitles.length === 1)
-                {
-                    encodeHandler.fixSubtitles([subtitles[0]])
+                else if(subtitles.length === 1) {
+                    subtitleHandler.fixSubtitles([subtitles[0]])
                     screenAnimatorAnim.restart();
                 }
             }
