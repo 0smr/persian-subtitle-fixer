@@ -3,13 +3,15 @@ import QtQuick.Controls 2.12
 import QtQuick.Controls.Styles 1.4
 import Qt.labs.settings 1.1
 
-Rectangle {
+import io.advanced.setting 1.0
+
+import "../controls"
+
+Item {
     id: control
 
     property var mainColor: Qt.hsla(setting.colorValue,1,0.50)
     property alias setting: setting
-
-    color: Qt.hsla(0,0,0.97)
 
     ScrollView {
         anchors.fill: control
@@ -129,8 +131,30 @@ Rectangle {
                     text: 'Include sub-Folders file'
                     enabled: false
                 }
+
+                CustomCheckBox{
+                    id: addToRightClickMenu
+                    anchors{
+                        top: includeSubFoldersCheckbox.bottom
+                        topMargin: 5
+                    }
+
+                    width: 20
+                    color: Qt.lighter(control.mainColor,1.4)
+                    text: 'Add to right-click menu'
+                    enabled: true
+
+                    onCheckStateChanged: {
+                        if(checked == true)
+                            settingHelper.addProgramToContextMenu();
+                    }
+                }
             }
         }
+    }
+
+    SettingModifier {
+        id: settingHelper
     }
 
     Settings{
@@ -140,6 +164,7 @@ Rectangle {
         property alias fileExtentionText: fileExtentionTextArea.text
         property alias createBackup: createBackupCheckbox.checked
         property alias includeSubFolders: includeSubFoldersCheckbox.checked
+        property alias addToRightClickMenu: addToRightClickMenu.checked
 
         property var validFileExten: []
     }
