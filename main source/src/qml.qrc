@@ -1,15 +1,15 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>CustomCheckDelegate.qml</file>
-        <file>CustomButton.qml</file>
-        <file>SettingsView.qml</file>
-        <file>CustomSlider.qml</file>
-        <file>CustomCheckBox.qml</file>
-        <file>DragAndDropView.qml</file>
-        <file>HambergerToggle.qml</file>
-        <file>ImageButton.qml</file>
-        <file>About.qml</file>
+        <file>controls/CustomCheckDelegate.qml</file>
+        <file>controls/CustomButton.qml</file>
+        <file>views/SettingsView.qml</file>
+        <file>controls/CustomSlider.qml</file>
+        <file>controls/CustomCheckBox.qml</file>
+        <file>views/DragAndDropView.qml</file>
+        <file>controls/HambergerToggle.qml</file>
+        <file>controls/ImageButton.qml</file>
+        <file>views/About.qml</file>
     </qresource>
     <qresource prefix="/res">
         <file>resources/sub_fixer.ico</file>
