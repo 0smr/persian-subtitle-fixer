@@ -1,17 +1,17 @@
-#include "encodinghandler.h"
+#include "subtitlehandler.h"
 
-encodingHandler::encodingHandler()
+subtitlehandler::subtitlehandler()
 {
 }
 
 /*!
- * \brief encodingHandler::localToUtf8
+ * \brief subtitlehandler::localToUtf8
  * \param fileAddress
  * \param codecs
  * \abstract change file encode from \a codec to utf-8 and replace some arabic letters with persian ones.
  * \return a bytecode that contain fixed subtitle text or empty data if not.
  */
-QByteArray encodingHandler::localToUtf8(QUrl fileAddress, QList<QByteArray> codecs)//"Windows-1256"
+QByteArray subtitlehandler::localToUtf8(QUrl fileAddress, QList<QByteArray> codecs)//"Windows-1256"
 {
     QFile file(fileAddress.toLocalFile());
     if(file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -38,6 +38,7 @@ QByteArray encodingHandler::localToUtf8(QUrl fileAddress, QList<QByteArray> code
                 data = textStream.readAll();
 
                 if(data.indexOf("سلام") != -1 ||
+                        data.indexOf("کرد") != -1 ||
                         data.indexOf("من") != -1 ||
                         data.indexOf("می") != -1 ||
                         data.indexOf("مي") != -1)
@@ -68,11 +69,11 @@ QByteArray encodingHandler::localToUtf8(QUrl fileAddress, QList<QByteArray> code
 }
 
 /*!
- * \brief encodingHandler::extractSubtitles
+ * \brief subtitlehandler::extractSubtitles
  * \param urls
  * \return a string list containing files urls.
  */
-QStringList encodingHandler::extractSubtitles(QList<QUrl> urls)
+QStringList subtitlehandler::extractSubtitles(QList<QUrl> urls)
 {
     QStringList subtitles;
 
@@ -89,12 +90,12 @@ QStringList encodingHandler::extractSubtitles(QList<QUrl> urls)
 }
 
 /*!
- * \brief encodingHandler::fixSubtitles
+ * \brief subtitlehandler::fixSubtitles
  * \abstract fix selected subtitles
  * \param selectedSubtitles containing files url if selected or empty string if file doesn't selected
  * \return a list containing weather if a case has succeed or not
  */
-QList<int> encodingHandler::fixSubtitles(QList<QUrl> selectedSubtitles)
+QList<int> subtitlehandler::fixSubtitles(QList<QUrl> selectedSubtitles)
 {
     QList<int> states{};
     for(const auto & sub : selectedSubtitles )
@@ -102,6 +103,7 @@ QList<int> encodingHandler::fixSubtitles(QList<QUrl> selectedSubtitles)
         if(!sub.isEmpty() && sub.isValid())
         {
             QByteArray content = localToUtf8(sub,QList<QByteArray>({"Windows-1256","ISO 8859-6"}));
+            validateSubtitle(content);
             QFile file(sub.toLocalFile());
 
             if(file.open(QIODevice::WriteOnly | QIODevice::Text) && content.length() > 1)
@@ -124,4 +126,24 @@ QList<int> encodingHandler::fixSubtitles(QList<QUrl> selectedSubtitles)
         }
     }
     return states;
+}
+
+QString subtitlehandler::tempFolderPath() const
+{
+    return mTempFolderPath;
+}
+
+void subtitlehandler::setTempFolderPath(QString tempFolderPath)
+{
+    if (mTempFolderPath == tempFolderPath)
+        return;
+
+    mTempFolderPath = tempFolderPath;
+    emit tempFolderPathChanged(mTempFolderPath);
+}
+
+QString subtitlehandler::setDesktopPathToTempPath()
+{
+    setTempFolderPath(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
+    return tempFolderPath();
 }
