@@ -1,6 +1,6 @@
-#include "settingAPI.h"
+#include "winRegisteryHandler.h"
 
-settingAPI::settingAPI()
+winRegisteryHandler::winRegisteryHandler()
 {
 
 }
