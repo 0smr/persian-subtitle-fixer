@@ -3,7 +3,10 @@ import QtQuick.Window 2.13
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.11
 
-import io.encode.handler 1.0
+import io.subtitle.handler 1.0
+
+import "views"
+import "controls"
 
 ApplicationWindow {
     id: root
@@ -13,7 +16,7 @@ ApplicationWindow {
     height: dragDropView.height + headerView.height
 
     minimumWidth: 225
-    minimumHeight: 135
+    minimumHeight: 200
 
     maximumWidth: 300
 
@@ -28,9 +31,12 @@ ApplicationWindow {
         id:dragDropView
 
         visible: false;
-        encodeHandler:
-            EncodeHandler{}
-        mainColor: settingView.mainColor
+        subtitleHandler:
+            SubtitleHandler{
+                parent: dragDropView
+
+            }
+        color: settingView.mainColor
         onFilesDroped: {
             headerToggle.state = 'close';
             settingButton.opacity = 0;
@@ -44,6 +50,17 @@ ApplicationWindow {
     About{
         id: aboutView
         visible: false;
+    }
+
+    Connections {
+        target: appInstance
+        onMessageReceived: {
+            dragDropView.externalFileAdded(message.split("\n"));
+        }
+    }
+
+    Component.onCompleted: {
+        dragDropView.addExternalFileToView(argv)
     }
 
     ColumnLayout{
@@ -171,18 +188,12 @@ ApplicationWindow {
             }
         }
 
-        Rectangle {
-            id: bodyView
-
+        StackView{
+            id:mainStackView
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            StackView{
-                id:mainStackView
-
-                anchors.fill: parent
-                initialItem: dragDropView
-            }
+            initialItem: dragDropView
         }
     }
 }
